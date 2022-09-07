@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<html lang-"en">
+	<head>
+		<title> IDS </title>
+		<script>
+			// auto refresh page every 1 second
+			function autoRefresh()
+			{
+				window.location = window.location.href;
+			}
+			
+			setInterval('autoRefresh()' , 1000);
+		</script>
+	</head>
+	<body>
+		<table class="table" id="info_table">
+			<tr class="table_header">
+				{% for headings in headings %}
+				<th class="table_cell"> {{headings}} </th>
+				{% endfor %}
+			</tr>
+			{% for row in dataArray %}
+			<tr class="table_row">
+				{% for cell in row %}
+				<td class="table_cell"> {{cell}} </td>
+				{% endfor %}
+			<tr>
+			{% endfor %}
+		</table>
+		
+	</body>
+</html>
