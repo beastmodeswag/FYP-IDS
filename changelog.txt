@@ -2,3 +2,6 @@
 
 29/08/2022
 Added TCP portion of the packet sniffer - Braxton
+Added Flask feature(Present data on a web app)
+Added function to check packets against a config.txt file and flag any malicious packets ---> rule-based IDS
+
