@@ -1,4 +1,10 @@
+# flash version 2.2.2
 pip install flask
 
-To run:
+# to update flask
+sudo pip install flask --upgrade
+            or
+sudo pip3 install flask --upgrade
+
+# To run:
 sudo flask --app main.py run
