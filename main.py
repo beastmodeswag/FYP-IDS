@@ -183,8 +183,8 @@ def main():
 					dataArray.append(rowData)
 					
 					#TESTING - GET INFO TABLE ID
-					infoTable = document.getElementById("info_table").id
-					print("#TESTING - GET INFO TABLE ID: ", infoTable)
+					#infoTable = document.getElementById("info_table").id
+					#print("#TESTING - GET INFO TABLE ID: ", infoTable)
 					
 					
 					return render_template("index.html", dataArray=dataArray, headings=headings) 
