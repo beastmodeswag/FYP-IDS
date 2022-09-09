@@ -2,8 +2,12 @@ import socket
 import struct
 import textwrap
 
-from flask import Flask
-from flask import render_template
+
+from flask_socketio import SocketIO, emit
+from flask import Flask, render_template, url_for, copy_current_request_context
+from time import sleep
+from threading import Thread, Event
+from random import random
 
 TAB_1 = '\t - '
 TAB_2 = '\t\t - '
@@ -16,6 +20,17 @@ DATA_TAB_3 = '\t\t\t '
 DATA_TAB_4 = '\t\t\t\t '
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'secret!'
+app.config['DEBUG'] = True
+
+
+#displayData Thread
+thread = Thread()
+thread_stop_event = Event()
+
+
+#turn the flask app into a socketio app
+socketio = SocketIO(app, async_mode=None, logger=True, engineio_logger=True)
 
 #global variable to store table data
 dataArray = []
@@ -111,13 +126,42 @@ def detect(protocol, source, src_port, destination, dest_port):
 	
 	return severityLevel	
 	
+	
+@socketio.on('connect', namespace='/test')
+def test_connect():
+    # need visibility of the global thread object
+	global thread
+	print('Client connected')
+    
+    
+	#Start the random number generator thread only if the thread has not been started before.
+	if not thread.is_alive():
+		print("Starting Thread")
+		thread = socketio.start_background_task(main)
+        
+@socketio.on('disconnect', namespace='/test')
+def test_disconnect():
+	print('Client disconnected')
 
-@app.route("/")
+
+def displayData(dataArray):
+    print("Displaying Data")
+    #while not thread_stop_event.isSet():
+    socketio.emit('newnumber', {'data': dataArray}, namespace='/test')
+   
+
+@app.route('/')
+def index():
+    #only by sending this page first will the client be connected to the socketio instance
+    return render_template('index.html')
+		
+
 def main():
 	conn = socket.socket(socket.PF_PACKET, socket.SOCK_RAW, socket.ntohs(3))
 	
 	
-	while True:
+	#while True:
+	while not thread_stop_event.isSet():
 		# Capture data in network
 		raw_data, addr = conn.recvfrom(65536)
 		
@@ -130,17 +174,13 @@ def main():
 			if eth_proto == 8:
 				(version, header_length, ttl, proto, src, target, data) = ipv4_packet(data)
 				
-		
+				'''
 				print(TAB_1 + 'IPv4 Pakcet: ')
 				print(TAB_2 + 'Version: {}, Header Length: {}, TTL: {}'.format(version, header_length, ttl))
 				print(TAB_2 + 'Protocol: {}, Source: {}, Target: {}'.format(proto, src, target))
+				'''
 				
 				headings = ["Source IP", "Source Port", "Destination IP", "Destination Port" ,"Protocol", "Severity"]
-				
-				
-				#rowData = [src, target, protocol]
-				
-				#dataArray.append(rowData)
 				
 				
 				# ICMP
@@ -149,18 +189,20 @@ def main():
 					
 					proto = 'icmp'
 					
-				
+					'''
 					print(TAB_1 + 'ICMP Packet: ')
 					print(TAB_2 + 'Type: {}, Code: {}, Checksum: {}'.format(icmp_type, code, checksum))
 					print(TAB_2 + 'Data:')
 					print(format_multi_line(DATA_TAB_3, data))
-					
+					'''
 					
 					severity = detect(proto, src, src_port, target, dest_port)
 					rowData = [src, src_port, target, dest_port, proto, severity]
-					dataArray.append(rowData)
 					
-					return render_template("index.html", dataArray=dataArray, headings=headings) 	
+					#dataArray.append(rowData)
+					dataArray.insert(0, rowData)
+					
+					displayData(rowData)	
 				
 				# TCP
 				elif proto == 6:
@@ -168,6 +210,7 @@ def main():
 					
 					proto = 'tcp'
 					
+					'''
 					print(TAB_1 + 'TCP Segment:')
 					print(TAB_2 + 'Source Port: {}, Destination Port: {}'.format(src_port, dest_port))
 					print(TAB_2 + 'Sequence: {}, Acknowledgement: {}'.format(sequence, acknowledgement))
@@ -175,19 +218,17 @@ def main():
 					print(TAB_3 + 'URG: {}, ACK: {}, PSH: {}, RST: {}, SYN: {}, FIN: {}'.format(flag_urg, flag_ack, flag_psh, flag_rst, flag_syn, flag_fin))
 					print(TAB_2 + 'Data:')
 					print(format_multi_line(DATA_TAB_3, data))
+					'''
 					# *****data*****??
 					
 					
 					severity = detect(proto, src, src_port, target, dest_port)
 					rowData = [src, src_port, target, dest_port, proto, severity]
-					dataArray.append(rowData)
 					
-					#TESTING - GET INFO TABLE ID
-					#infoTable = document.getElementById("info_table").id
-					#print("#TESTING - GET INFO TABLE ID: ", infoTable)
+					#dataArray.append(rowData)
+					dataArray.insert(0, rowData)
 					
-					
-					return render_template("index.html", dataArray=dataArray, headings=headings) 
+					displayData(rowData)
 					
 				#UDP
 				elif proto == 17:
@@ -195,19 +236,23 @@ def main():
 					
 					proto = 'udp'
 					
-					print(TAB_1 + 'UDP Segment:')
-					print(TAB_2 + 'Source Port: {}, Destination Port: {}, Length: {}'.format(src_port, dest_port, length))
+					
+					#print(TAB_1 + 'UDP Segment:')
+					#print(TAB_2 + 'Source Port: {}, Destination Port: {}, Length: {}'.format(src_port, dest_port, length))
 					
 					severity = detect(proto, src, src_port, target, dest_port)
 					rowData = [src, src_port, target, dest_port, proto, severity]
-					dataArray.append(rowData)
+					#dataArray.append(rowData)
+					dataArray.insert(0, rowData)
 					
-					return render_template("index.html", dataArray=dataArray, headings=headings) 
-			else:
-				
-				print('Data:')
-				print(format_multi_line(DATA_TAB_1, data))
+					displayData(rowData)
+
+	
+			#else:
+				#pass
+				#print('Data:')
+				#print(format_multi_line(DATA_TAB_1, data))
 
 
 if __name__ == '__main__':
-	main()
+	socketio.run(app)

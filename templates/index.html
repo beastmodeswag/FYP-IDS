@@ -1,33 +1,21 @@
 <!DOCTYPE html>
+<html>
+<head>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.4.1/socket.io.min.js"></script>
+    <script src="static/js/application.js"></script>
 
-<html lang-"en">
-	<head>
-		<title> IDS </title>
-		<script>
-			// auto refresh page every 1 second
-			function autoRefresh()
-			{
-				window.location = window.location.href;
-			}
-			
-			setInterval('autoRefresh()' , 1000);
-		</script>
-	</head>
-	<body>
-		<table class="table" id="info_table">
-			<tr class="table_header">
-				{% for headings in headings %}
-				<th class="table_cell"> {{headings}} </th>
-				{% endfor %}
-			</tr>
-			{% for row in dataArray %}
-			<tr class="table_row">
-				{% for cell in row %}
-				<td class="table_cell"> {{cell}} </td>
-				{% endfor %}
-			<tr>
-			{% endfor %}
-		</table>
-		
-	</body>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container" id="content">
+    <div class="row">
+        <h3>Packet Sniffer Data:</h3>
+         <div id="log">
+        </div> <!-- /#log -->
+    </div>
+</div>
+
+
+</body>
 </html>
