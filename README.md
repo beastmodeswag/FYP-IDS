@@ -13,5 +13,10 @@ pip install -r requirements.txt
 # To run the program
 sudo python main.py
 
-*Note: Remember to change the host address in the config.txt file to your ip address
+# An ip address should show up on the terminal(e.g http://127.0.0.1:5050)
+
+
+# Remember to change the host address in the config.txt file to your ip address
+
+
 *Note: May not work on windows systems as the packet sniffer is set to sniff packets for unix-based systems
