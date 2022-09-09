@@ -2,10 +2,10 @@
 2) cd FYP-IDS
 
 # Create a virtual environment(To ensure the dependencies do not affect other python programs)
-3) python3.9 -m venv venv
+3) python3.10 -m venv venv  #or whichever version of python you ahve running(e.g 'python3.9 -m venv venv')
 
 # Activate that virtual environment
-4) source venv/bin/activate #If there are errors check the directory(e.g 'source /bin/activate' instead)
+4) source venv/bin/activate   #If there are errors check the directory(e.g 'source /bin/activate' instead)
 
 # Install the project requirements.
 5) pip install -r requirements.txt
