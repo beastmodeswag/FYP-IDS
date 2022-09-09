@@ -1,4 +1,4 @@
-# FYP-IDS
+# FYP-IDS Instructions to run
 1) git clone https://github.com/beastmodeswag/FYP-IDS.git
 2) cd FYP-IDS
 
