@@ -3,7 +3,7 @@
 2) cd FYP-IDS
 
 # Create a virtual environment
-3) python3.9 -m venv venv
+3) python3.10 -m venv venv #or whichever version of python you are running(i.e 'python3.9 -m venv venv' etc.)
 
 # Activate that virtual environment
 4) source venv/bin/activate
