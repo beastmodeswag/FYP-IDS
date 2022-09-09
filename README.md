@@ -14,6 +14,6 @@
 # To run the program
 6) sudo python main.py
 
-*Remember to change the host ip address in this config.txt file to your ip address*
+*Remember to change the host ip address in the config.txt file to your ip address*
 
 *Note : This program may not work on windows as the packet sniffer is set to sniff packets for linux only*
