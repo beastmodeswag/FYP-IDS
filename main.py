@@ -148,6 +148,7 @@ def displayData(dataArray):
     print("Displaying Data")
     #while not thread_stop_event.isSet():
     socketio.emit('newnumber', {'data': dataArray}, namespace='/test')
+    socketio.sleep(1)
    
 
 @app.route('/')
