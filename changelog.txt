@@ -13,4 +13,5 @@ Added Ajax that allows the data on the webpage to be updated without having to c
 Updated the requirements.txt - Mu
 Added a README.md with instructions on how to set up the virtual environment and install the libaries required to run the program - Mu
 
-
+10/09/2022
+Changed the display format of the data to a table format
