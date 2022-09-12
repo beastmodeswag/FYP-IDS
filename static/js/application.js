@@ -1,5 +1,6 @@
 
 $(document).ready(function(){
+  $("#start").click(function(){
     //connect to the socket server.
     var socket = io.connect('http://' + document.domain + ':' + location.port + '/test');
     var data_received = [];
@@ -45,5 +46,5 @@ $(document).ready(function(){
         data_received.pop(msg.data);
         //$('#log').html(data_string);
     });
-
+  });
 });
