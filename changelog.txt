@@ -15,3 +15,20 @@ Added a README.md with instructions on how to set up the virtual environment and
 
 10/09/2022
 Changed the display format of the data to a table format
+
+12/09/2022
+Added color coding for malicious packets based on severity levels.(Blue->low, Orange->Medium, Red->High)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
