@@ -119,10 +119,10 @@ def detect(protocol, source, src_port, destination, dest_port):
 
 			if(config_src_port != "any") or (config_dest_port != "any"):
 				if(protocol == config_proto) and (source == config_source_addr) and (src_port == config_src_port) and (destination == config_dest_addr) and (dest_port == config_dest_port):
-					severityLevel = severity
+					severityLevel = severity.strip()
 			else:
 				if(protocol == config_proto) and (source == config_source_addr) and (destination == config_dest_addr):
-					severityLevel = severity 
+					severityLevel = severity.strip()
 	
 	return severityLevel	
 	
@@ -149,7 +149,7 @@ def displayData(dataArray):
     #while not thread_stop_event.isSet():
     socketio.emit('newnumber', {'data': dataArray}, namespace='/test')
     socketio.sleep(1)
-   
+    
 
 @app.route('/')
 def index():
@@ -162,7 +162,7 @@ def main():
 	
 	
 	#while True:
-	while not thread_stop_event.isSet():
+	while not thread_stop_event.is_set():
 		# Capture data in network
 		raw_data, addr = conn.recvfrom(65536)
 		

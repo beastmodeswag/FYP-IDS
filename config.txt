@@ -19,3 +19,5 @@ tcp 10.0.2.4 any -> 142.250.4.190 any low
 tcp 10.0.2.4 any -> 142.250.4.136 any high
 tcp 10.0.2.4 any -> 142.250.4.91 any low
 tcp 10.0.2.4 any -> 165.21.6.81 any low
+udp 10.0.2.4 any --> 157.240.15.35 any low
+udp 10.0.2.4 any --> 157.240.15.13 any high
