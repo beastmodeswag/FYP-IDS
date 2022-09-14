@@ -1,6 +1,7 @@
 import socket
 import struct
 import textwrap
+import datetime
 
 
 from flask_socketio import SocketIO, emit
@@ -133,7 +134,6 @@ def test_connect():
 	global thread
 	print('Client connected')
     
-    
 	#Start the random number generator thread only if the thread has not been started before.
 	if not thread.is_alive():
 		print("Starting Thread")
@@ -143,13 +143,35 @@ def test_connect():
 def test_disconnect():
 	print('Client disconnected')
 
-
+#pass data to front end to display on webpage
 def displayData(dataArray):
     print("Displaying Data")
-    #while not thread_stop_event.isSet():
     socketio.emit('newnumber', {'data': dataArray}, namespace='/test')
     socketio.sleep(1)
     
+#receieve message from client
+@socketio.on('message', namespace='/test')
+def handle_message(message):
+	print("************	Received message: " + message)
+	
+	if(message == 'export'):
+		export()
+
+	
+def export():
+
+	x = datetime.datetime.now()
+	
+	x = str(x) + ".txt"
+
+	with open(x, 'w') as f:
+		for i in dataArray:
+			for j in dataArray:
+				f.write(str(j))
+				f.write(",")
+				f.write('\n')
+				
+
 
 @app.route('/')
 def index():
@@ -248,7 +270,7 @@ def main():
 					
 					displayData(rowData)
 
-	
+
 			#else:
 				#pass
 				#print('Data:')
