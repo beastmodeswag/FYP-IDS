@@ -1,7 +1,6 @@
 # TODO
 #
 # Start/Stop button
-# Export data to file(.pcap/.txt/.csv?)
 # Add a pop-out box to alert the user if any malicious packets are detected
 # Filter Data (i.e Filter by protocol or ip etc.)
 # View button to view more data of the specific packet
