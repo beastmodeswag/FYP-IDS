@@ -19,6 +19,8 @@ Changed the display format of the data to a table format
 12/09/2022
 Added color coding for malicious packets based on severity levels.(Blue->low, Orange->Medium, Red->High)
 
+14/09/2022
+Added function to export data to text file
 
 
 
