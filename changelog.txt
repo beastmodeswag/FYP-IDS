@@ -22,7 +22,11 @@ Added color coding for malicious packets based on severity levels.(Blue->low, Or
 14/09/2022
 Added function to export data to text file
 
+05/10/2022
+Added a database using mysqlite to store the malicious packets
 
+16/10/2022
+Added ddos detection
 
 
 
