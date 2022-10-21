@@ -2,7 +2,7 @@ import socket
 import struct
 import textwrap
 import datetime
-
+import db
 
 from flask_socketio import SocketIO, emit
 from flask import Flask, render_template, url_for, copy_current_request_context
@@ -30,12 +30,12 @@ thread = Thread()
 thread_stop_event = Event()
 
 
-#turn the flask app into a socketio app
-socketio = SocketIO(app, async_mode=None, logger=True, engineio_logger=True)
+socketio = SocketIO(app, async_mode=None, logger=True, engineio_logger=True) #turn the flask app into a socketio app
+dataArray = [] #global variable to store table data
+database = db.myDB #create database object
 
-#global variable to store table data
-dataArray = []
-
+localhost_ip = "10.0.2.4"
+dict = {}
 
 #unpack ethernet frame
 def ethernet_frame(data):
@@ -101,6 +101,9 @@ def format_multi_line(prefix, string, size=80):
 
 # detect malicious packets against config.txt
 def detect(protocol, source, src_port, destination, dest_port):
+
+	global database	
+	
 	f = open('config.txt', 'r')
 	
 	severityLevel = "None"
@@ -121,11 +124,55 @@ def detect(protocol, source, src_port, destination, dest_port):
 			if(config_src_port != "any") or (config_dest_port != "any"):
 				if(protocol == config_proto) and (source == config_source_addr) and (src_port == config_src_port) and (destination == config_dest_addr) and (dest_port == config_dest_port):
 					severityLevel = severity.strip()
+					database.updateDB(protocol, source, src_port, destination, dest_port , severityLevel)
 			else:
 				if(protocol == config_proto) and (source == config_source_addr) and (destination == config_dest_addr):
 					severityLevel = severity.strip()
+					database.updateDB(protocol, source, src_port, destination, dest_port , severityLevel)
 	
 	return severityLevel	
+	
+
+def ddos():
+
+	s = socket.socket(socket.PF_PACKET, socket.SOCK_RAW, 8)
+	
+	global dict
+	message = "test"
+
+	file_txt = open("attack_DDoS.txt",'a')
+	t1 = str(datetime.datetime.now())
+
+	file_txt.writelines(t1)
+	file_txt.writelines("\n")
+
+
+	No_of_IPs = 5
+	R_No_of_IPs = No_of_IPs +10
+	pkt = s.recvfrom(2048)
+	ipheader = pkt[0][14:34]
+	ip_hdr = struct.unpack("!8sB3s4s4s",ipheader)
+	IP = socket.inet_ntoa(ip_hdr[3])
+	print ("The Source of the IP is:", IP)
+	print(dict)
+
+	if dict.__contains__(IP):
+		dict[IP] = dict[IP]+1
+	else:
+		dict[IP] = 0
+
+
+	if(dict[IP] >= No_of_IPs) and (dict[IP] <= R_No_of_IPs) :
+		print("DDOS attack detected")
+		line = "DDOS attack is Detected: "
+		file_txt.writelines(line)
+		file_txt.writelines(IP)
+		file_txt.writelines("\n")
+		message = "Possible DDOS attack detected"
+		
+		
+	print(message)
+	return message
 	
 	
 @socketio.on('connect', namespace='/test')
@@ -147,7 +194,7 @@ def test_disconnect():
 def displayData(dataArray):
     print("Displaying Data")
     socketio.emit('newnumber', {'data': dataArray}, namespace='/test')
-    socketio.sleep(1)
+    socketio.sleep(0.5)
     
 #receieve message from client
 @socketio.on('message', namespace='/test')
@@ -203,8 +250,6 @@ def main():
 				print(TAB_2 + 'Protocol: {}, Source: {}, Target: {}'.format(proto, src, target))
 				'''
 				
-				headings = ["Source IP", "Source Port", "Destination IP", "Destination Port" ,"Protocol", "Severity"]
-				
 				
 				# ICMP
 				if proto == 1:
@@ -220,7 +265,8 @@ def main():
 					'''
 					
 					severity = detect(proto, src, src_port, target, dest_port)
-					rowData = [src, src_port, target, dest_port, proto, severity]
+					check_ddos = ddos()
+					rowData = [src, src_port, target, dest_port, proto, severity, check_ddos]
 					
 					#dataArray.append(rowData)
 					dataArray.insert(0, rowData)
@@ -246,7 +292,8 @@ def main():
 					
 					
 					severity = detect(proto, src, src_port, target, dest_port)
-					rowData = [src, src_port, target, dest_port, proto, severity]
+					check_ddos = ddos()
+					rowData = [src, src_port, target, dest_port, proto, severity, check_ddos]
 					
 					#dataArray.append(rowData)
 					dataArray.insert(0, rowData)
@@ -264,7 +311,8 @@ def main():
 					#print(TAB_2 + 'Source Port: {}, Destination Port: {}, Length: {}'.format(src_port, dest_port, length))
 					
 					severity = detect(proto, src, src_port, target, dest_port)
-					rowData = [src, src_port, target, dest_port, proto, severity]
+					check_ddos = ddos()
+					rowData = [src, src_port, target, dest_port, proto, severity, check_ddos]
 					#dataArray.append(rowData)
 					dataArray.insert(0, rowData)
 					

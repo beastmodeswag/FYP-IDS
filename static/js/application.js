@@ -17,7 +17,7 @@ var data_received = [];
 			
 			console.log("Received Data" + msg.data);
 		
-			
+			console.log(msg.data)
 			data_received.push(msg.data);
 			var data_string = '';
 
@@ -29,7 +29,7 @@ var data_received = [];
 				
 				for(var j = 0; j < data_received[i].length-1; j++)
 				{
-					console.log(data_received[i][5]);
+					console.log(data_received[i][6]);
 					if(String(data_received[i][5]) == "low")
 					{
 						cell = row.insertCell(j);
@@ -56,14 +56,6 @@ var data_received = [];
 			}	
 		    });
 	}); 
-	
-	//stop button clicked *isnt working
-	$("#stop").click(function(){
-	
-		var socket = io.connect('http://' + document.domain + ':' + location.port + '/test');
-		
-		socket.send("stop");
-	});
 	
 	//export button clicked
 	$("#export").click(function(){
