@@ -22,3 +22,10 @@
 
 
 *Note: May not work on windows systems as the packet sniffer is set to sniff packets for unix-based systems
+
+# Config telegram bot to send message to you
+1. Search for LixDetector bot on telegram
+2. Send a message in the LixDetector chat
+3. Visit https://api.telegram.org/bot5623414566:AAGKkS-1jP2mWgCSYVkSkMDs9QmvLnmaegU/getUpdates 
+4. Copy the the value in the id parameter
+5. Update the send_to_telegram function's chatID variable with the id value copied from before
