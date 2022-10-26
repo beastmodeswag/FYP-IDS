@@ -3,6 +3,7 @@ import struct
 import textwrap
 import datetime
 import db
+import requests
 
 from flask_socketio import SocketIO, emit
 from flask import Flask, render_template, url_for, copy_current_request_context
@@ -138,7 +139,7 @@ def ddos():
 	s = socket.socket(socket.PF_PACKET, socket.SOCK_RAW, 8)
 	
 	global dict
-	message = "test"
+	message = ""
 
 	file_txt = open("attack_DDoS.txt",'a')
 	t1 = str(datetime.datetime.now())
@@ -173,7 +174,17 @@ def ddos():
 		
 	print(message)
 	return message
-	
+
+def send_to_telegram(message):
+
+    apiToken = '5623414566:AAGKkS-1jP2mWgCSYVkSkMDs9QmvLnmaegU'
+    chatID = '1095815228'
+    apiURL = f'https://api.telegram.org/bot{apiToken}/sendMessage'
+
+    try:
+        response = requests.post(apiURL, json={'chat_id': chatID, 'text': message})
+    except Exception as e:
+        print(e)
 	
 @socketio.on('connect', namespace='/test')
 def test_connect():
@@ -271,7 +282,9 @@ def main():
 					#dataArray.append(rowData)
 					dataArray.insert(0, rowData)
 					
-					displayData(rowData)	
+					displayData(rowData)
+					if check_ddos == "Possible DDOS attack detected":
+						send_to_telegram(rowData)	
 				
 				# TCP
 				elif proto == 6:
@@ -299,6 +312,10 @@ def main():
 					dataArray.insert(0, rowData)
 					
 					displayData(rowData)
+					if check_ddos == "Possible DDOS attack detected":
+						send_to_telegram(rowData)
+                    
+                   
 					
 				#UDP
 				elif proto == 17:
@@ -317,7 +334,8 @@ def main():
 					dataArray.insert(0, rowData)
 					
 					displayData(rowData)
-
+					if check_ddos == "Possible DDOS attack detected":
+						send_to_telegram(rowData)
 
 			#else:
 				#pass
