@@ -271,13 +271,13 @@ def main():
 					'''
 					print(TAB_1 + 'ICMP Packet: ')
 					print(TAB_2 + 'Type: {}, Code: {}, Checksum: {}'.format(icmp_type, code, checksum))
-					print(TAB_2 + 'Data:')
+					print(TAB_2 + 'Data:')'''
 					print(format_multi_line(DATA_TAB_3, data))
-					'''
+					
 					
 					severity = detect(proto, src, src_port, target, dest_port)
 					check_ddos = ddos()
-					rowData = [src, src_port, target, dest_port, proto, severity, check_ddos]
+					rowData = [src, src_port, target, dest_port, proto, severity, check_ddos, str(data)]
 					
 					#dataArray.append(rowData)
 					dataArray.insert(0, rowData)
@@ -298,15 +298,15 @@ def main():
 					print(TAB_2 + 'Sequence: {}, Acknowledgement: {}'.format(sequence, acknowledgement))
 					print(TAB_2 + 'Flags:')
 					print(TAB_3 + 'URG: {}, ACK: {}, PSH: {}, RST: {}, SYN: {}, FIN: {}'.format(flag_urg, flag_ack, flag_psh, flag_rst, flag_syn, flag_fin))
-					print(TAB_2 + 'Data:')
+					print(TAB_2 + 'Data:')'''
 					print(format_multi_line(DATA_TAB_3, data))
-					'''
+					
 					# *****data*****??
 					
 					
 					severity = detect(proto, src, src_port, target, dest_port)
 					check_ddos = ddos()
-					rowData = [src, src_port, target, dest_port, proto, severity, check_ddos]
+					rowData = [src, src_port, target, dest_port, proto, severity, check_ddos, str(data)]
 					
 					#dataArray.append(rowData)
 					dataArray.insert(0, rowData)
@@ -329,7 +329,7 @@ def main():
 					
 					severity = detect(proto, src, src_port, target, dest_port)
 					check_ddos = ddos()
-					rowData = [src, src_port, target, dest_port, proto, severity, check_ddos]
+					rowData = [src, src_port, target, dest_port, proto, severity, check_ddos, str(data)]
 					#dataArray.append(rowData)
 					dataArray.insert(0, rowData)
 					

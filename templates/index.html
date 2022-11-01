@@ -7,15 +7,45 @@
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <body>
+	<!-- Opening new window to show packet details (instead of modal) -->
+	<script>
+	function myFunction(clicked_id) {
+		/*
+		var details = `
+		Source IP: ${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).source_ip}
+		Source Port: ${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).source_port}
+		Destination IP: ${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).dest_ip}
+		Destination Port: ${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).dest_port}
+		Protocol: ${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).prot}
+		Severity: ${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).severity}
+		Message: ${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).msg}
+			      `
+		*/
+		
+		var myWindow = window.open("", "MsgWindow", "width=600,height=400");
+		myWindow.document.write(`<p><u> Packet ${clicked_id + 1} </u></p>`);
+		myWindow.document.write(`<p> Source IP: ${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).source_ip} </p>`);
+		myWindow.document.write(`<p> Source Port: ${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).source_port} </p>`);
+		myWindow.document.write(`<p> Destination IP: ${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).dest_ip} </p>`);
+		myWindow.document.write(`<p> Destination Port: ${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).dest_port} </p>`);
+		myWindow.document.write(`<p> Protocol: ${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).prot} </p>`);
+		myWindow.document.write(`<p> Severity: ${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).severity} </p>`);
+		myWindow.document.write(`<p> Message: ${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).msg} </p>`);
+		myWindow.document.write(`<p> Hexdigest: ${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).data} </p>`);
+		
+	}
+	</script>
+	<!------------------->
 	<br>
 	<button id="start"> Start </button>
 	<button id="export">Export Data</button>
 	<br><br>
+	<p><u>Severity Levels</u></p>
 	<p> Low = Blue </p>
 	<p> Medium = Orange </p>
 	<p> High = Red </p>
 	<h3>Packet Sniffer Data:</h3>
-	<table id='dataTable' class="table table-bordered" style="width:100%">
+	<table id='dataTable' class="table table-bordered" style="width:100%; text-align:center;">
 		<tr>
 			<th>Source IP</th>
 			<th>Source Port</th>
@@ -24,9 +54,8 @@
 			<th>Protocol</th>
 			<th>Severity</th>
 			<th>Message</th>
+			<th>View Details</th>
 		</tr>
-		
 	</table>
-
 </body>
 </html>

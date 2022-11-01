@@ -1,6 +1,7 @@
 $(document).ready(function(){
 
 var data_received = [];
+var id = 0;
 
 	$("#start").click(function(){
 		var buttonId = this.id;
@@ -25,9 +26,9 @@ var data_received = [];
 			{
 				//insert table with 6 cells
 				row = table.insertRow(1);
-
 				
-				for(var j = 0; j < data_received[i].length-1; j++)
+				
+				for(var j = 0; j < data_received[i].length-1; j++) //changed this, no more -1 at the end
 				{
 					console.log(data_received[i][6]);
 					if(String(data_received[i][5]) == "low")
@@ -49,11 +50,35 @@ var data_received = [];
 					{
 						cell = row.insertCell(j);
 						cell.innerHTML = String(data_received[i][j]);
+						
+						var Packet = {
+							source_ip : String(data_received[i][0]),
+							source_port : String(data_received[i][1]),
+							dest_ip : String(data_received[i][2]),
+							dest_port : String(data_received[i][3]),
+							prot : String(data_received[i][4]),
+							severity : String(data_received[i][5]),
+							msg : String(data_received[i][6]),
+							data : String(data_received[i][7])
+						};
+						
+						localStorage.setItem(`packet${id}`, JSON.stringify(Packet)); //storing the variables in localstorage
 					}
-				
+							
 				}
 				
-			}	
+				//new code for button
+				button = row.insertCell(7); //Last row after message
+
+				button.innerHTML = `<button onclick="myFunction(${id})" class="btn btn-info btn-lg" id="${id}">View</button>`;
+				
+				//id increment for unique button id
+				id++;
+			}
+			
+			//total number of packets
+			localStorage.setItem("id", id);
+
 		    });
 	}); 
 	
@@ -66,4 +91,5 @@ var data_received = [];
 		socket.send("export");
 		
 	});
+	
 });
