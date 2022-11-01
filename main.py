@@ -10,6 +10,7 @@ from flask import Flask, render_template, url_for, copy_current_request_context
 from time import sleep
 from threading import Thread, Event
 from random import random
+from hexdump import hexdump
 
 TAB_1 = '\t - '
 TAB_2 = '\t\t - '
@@ -277,7 +278,7 @@ def main():
 					
 					severity = detect(proto, src, src_port, target, dest_port)
 					check_ddos = ddos()
-					rowData = [src, src_port, target, dest_port, proto, severity, check_ddos, str(data)]
+					rowData = [src, src_port, target, dest_port, proto, severity, check_ddos, str(hexdump(data))]
 					
 					#dataArray.append(rowData)
 					dataArray.insert(0, rowData)
@@ -306,7 +307,7 @@ def main():
 					
 					severity = detect(proto, src, src_port, target, dest_port)
 					check_ddos = ddos()
-					rowData = [src, src_port, target, dest_port, proto, severity, check_ddos, str(data)]
+					rowData = [src, src_port, target, dest_port, proto, severity, check_ddos, str(hexdump(data))]
 					
 					#dataArray.append(rowData)
 					dataArray.insert(0, rowData)
@@ -329,7 +330,7 @@ def main():
 					
 					severity = detect(proto, src, src_port, target, dest_port)
 					check_ddos = ddos()
-					rowData = [src, src_port, target, dest_port, proto, severity, check_ddos, str(data)]
+					rowData = [src, src_port, target, dest_port, proto, severity, check_ddos, str(hexdump(data))]
 					#dataArray.append(rowData)
 					dataArray.insert(0, rowData)
 					
