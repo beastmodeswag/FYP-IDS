@@ -36,7 +36,7 @@ socketio = SocketIO(app, async_mode=None, logger=True, engineio_logger=True) #tu
 dataArray = [] #global variable to store table data
 database = db.myDB #create database object
 
-localhost_ip = "10.0.2.4"
+localhost_ip = "10.0.2.4"#change this
 dict = {}
 
 #unpack ethernet frame
@@ -126,23 +126,21 @@ def detect(protocol, source, src_port, destination, dest_port):
 			if(config_src_port != "any") or (config_dest_port != "any"):
 				if(protocol == config_proto) and (source == config_source_addr) and (src_port == config_src_port) and (destination == config_dest_addr) and (dest_port == config_dest_port):
 					severityLevel = severity.strip()
-					database.updateDB(protocol, source, src_port, destination, dest_port , severityLevel)
 			else:
 				if(protocol == config_proto) and (source == config_source_addr) and (destination == config_dest_addr):
 					severityLevel = severity.strip()
-					database.updateDB(protocol, source, src_port, destination, dest_port , severityLevel)
 	
 	return severityLevel	
 	
 
-def ddos():
+def dos():
 
 	s = socket.socket(socket.PF_PACKET, socket.SOCK_RAW, 8)
 	
 	global dict
 	message = ""
 
-	file_txt = open("attack_DDoS.txt",'a')
+	file_txt = open("attack_DoS.txt",'a')
 	t1 = str(datetime.datetime.now())
 
 	file_txt.writelines(t1)
@@ -170,7 +168,7 @@ def ddos():
 		file_txt.writelines(line)
 		file_txt.writelines(IP)
 		file_txt.writelines("\n")
-		message = "Possible DDOS attack detected"
+		message = "Possible DoS attack detected"
 		
 		
 	print(message)
@@ -179,7 +177,7 @@ def ddos():
 def send_to_telegram(message):
 
     apiToken = '5623414566:AAGKkS-1jP2mWgCSYVkSkMDs9QmvLnmaegU'
-    chatID = ''
+    chatID = '625857550' # change this
     apiURL = f'https://api.telegram.org/bot{apiToken}/sendMessage'
 
     try:
@@ -246,6 +244,7 @@ def main():
 	while not thread_stop_event.is_set():
 		# Capture data in network
 		raw_data, addr = conn.recvfrom(65536)
+		date_time = str(datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S"))
 		
 		#format data
 		dest_mac, src_mac, eth_proto, data = ethernet_frame(raw_data)
@@ -277,15 +276,26 @@ def main():
 					
 					
 					severity = detect(proto, src, src_port, target, dest_port)
-					check_ddos = ddos()
-					rowData = [src, src_port, target, dest_port, proto, severity, check_ddos, str(hexdump(data))]
+					check_ddos = dos()
+					#rowData = [date_time, src, src_port, target, dest_port, proto, severity, check_ddos, str(data)]
 					
 					#dataArray.append(rowData)
-					dataArray.insert(0, rowData)
+					#dataArray.insert(0, rowData)
 					
+					#displayData(rowData)
+					if check_ddos == "Possible DoS attack detected":
+						severity = 'medium'	
+						
+					
+					rowData = [date_time, src, src_port, target, dest_port, proto, severity, check_ddos]
+					dataArray.insert(0, rowData)	
+					
+					if severity == 'high' or severity == 'medium' or severity == 'low':
+						send_to_telegram(rowData)
+						database.updateDB(date_time, proto, src, src_port, target, dest_port , severity, check_ddos)
+						
+					rowData.append(str(hexdump(data)))
 					displayData(rowData)
-					if check_ddos == "Possible DDOS attack detected":
-						send_to_telegram(rowData)	
 				
 				# TCP
 				elif proto == 6:
@@ -306,17 +316,26 @@ def main():
 					
 					
 					severity = detect(proto, src, src_port, target, dest_port)
-					check_ddos = ddos()
-					rowData = [src, src_port, target, dest_port, proto, severity, check_ddos, str(hexdump(data))]
+					check_ddos = dos()
+					#rowData = [date_time, src, src_port, target, dest_port, proto, severity, check_ddos, str(data)]
 					
 					#dataArray.append(rowData)
-					dataArray.insert(0, rowData)
+					#dataArray.insert(0, rowData)
 					
-					displayData(rowData)
-					if check_ddos == "Possible DDOS attack detected":
+					#displayData(rowData)
+					if check_ddos == "Possible DoS attack detected":
+						severity = 'medium'	
+						
+					
+					rowData = [date_time, src, src_port, target, dest_port, proto, severity, check_ddos]
+					dataArray.insert(0, rowData)	
+					
+					if severity == 'high' or severity == 'medium' or severity == 'low':
 						send_to_telegram(rowData)
-                    
-                   
+						database.updateDB(date_time, proto, src, src_port, target, dest_port , severity, check_ddos)
+						
+					rowData.append(str(hexdump(data)))
+					displayData(rowData)
 					
 				#UDP
 				elif proto == 17:
@@ -329,14 +348,22 @@ def main():
 					#print(TAB_2 + 'Source Port: {}, Destination Port: {}, Length: {}'.format(src_port, dest_port, length))
 					
 					severity = detect(proto, src, src_port, target, dest_port)
-					check_ddos = ddos()
-					rowData = [src, src_port, target, dest_port, proto, severity, check_ddos, str(hexdump(data))]
-					#dataArray.append(rowData)
-					dataArray.insert(0, rowData)
+					check_ddos = dos()
 					
-					displayData(rowData)
-					if check_ddos == "Possible DDOS attack detected":
+					#displayData(rowData)
+					if check_ddos == "Possible DoS attack detected":
+						severity = 'medium'	
+						
+					
+					rowData = [date_time, src, src_port, target, dest_port, proto, severity, check_ddos]
+					dataArray.insert(0, rowData)	
+					
+					if severity == 'high' or severity == 'medium' or severity == 'low':
 						send_to_telegram(rowData)
+						database.updateDB(date_time, proto, src, src_port, target, dest_port , severity, check_ddos)
+						
+					rowData.append(str(hexdump(data)))
+					displayData(rowData)
 
 			#else:
 				#pass

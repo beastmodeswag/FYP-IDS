@@ -12,8 +12,11 @@
 # Install the project requirements.
 5) pip install -r requirements.txt
 
+#change the localhost_ip in main.py
+6) change the variable 'localhost_ip' with your ip
+
 # To run the program(requires sudo)
-6) sudo python main.py
+7) sudo python main.py
 
 # An ip address should show up on the terminal(e.g http://127.0.0.1:5050)
 

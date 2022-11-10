@@ -7,12 +7,14 @@ c = conn.cursor()
 
 #create a table to store malicious packets
 c.execute("""CREATE TABLE IF NOT EXISTS malicious_packets (
+	date_time text,
 	source_ip text,
 	source_port text,
 	destination_ip text,
 	destination_port text,
 	protocol text,
-	severity text
+	severity text,
+	message text
 	)""")
 
 conn.commit()
@@ -24,7 +26,7 @@ class myDB:
 
 		
 	
-	def updateDB(protocol, source, src_port, destination, dest_port, severity):
+	def updateDB(date_time, protocol, source, src_port, destination, dest_port , severity, check_ddos):
 	
 		print("================+HEEREE======================")
 		#error/success message
@@ -47,7 +49,7 @@ class myDB:
 		#create cursor
 		c = conn.cursor()
 		
-		c.execute("INSERT INTO malicious_packets VALUES (?,?,?,?,?,?)", (source, str(src_port), destination, str(dest_port), protocol, severity))
+		c.execute("INSERT INTO malicious_packets VALUES (?,?,?,?,?,?,?,?)", (str(date_time), source, str(src_port), destination, str(dest_port), protocol, severity, check_ddos))
 		
 		conn.commit()
 		
