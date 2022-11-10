@@ -10,9 +10,21 @@
 	<!-- Opening new window to show packet details (instead of modal) -->
 	<script>
 	function myFunction(clicked_id) {
+		/*
+		var details = `
+		Source IP: ${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).source_ip}
+		Source Port: ${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).source_port}
+		Destination IP: ${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).dest_ip}
+		Destination Port: ${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).dest_port}
+		Protocol: ${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).prot}
+		Severity: ${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).severity}
+		Message: ${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).msg}
+			      `
+		*/
 		
-		var myWindow = window.open("", "MsgWindow", "width=600,height=400");
+		var myWindow = window.open("", "MsgWindow", "width=800,height=400");
 		myWindow.document.write(`<p><u> Packet ${clicked_id + 1} </u></p>`);
+		myWindow.document.write(`<p> Date and Time: ${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).date_time} </p>`);
 		myWindow.document.write(`<p> Source IP: ${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).source_ip} </p>`);
 		myWindow.document.write(`<p> Source Port: ${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).source_port} </p>`);
 		myWindow.document.write(`<p> Destination IP: ${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).dest_ip} </p>`);
@@ -20,8 +32,8 @@
 		myWindow.document.write(`<p> Protocol: ${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).prot} </p>`);
 		myWindow.document.write(`<p> Severity: ${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).severity} </p>`);
 		myWindow.document.write(`<p> Message: ${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).msg} </p>`);
-		myWindow.document.write(`<p><u> Hexdigest of Packet ${clicked_id + 1} </u></p>`);
-		myWindow.document.write(`<pre>${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).data}</pre>`);
+		myWindow.document.write(`<p> Hexdigest: </p>`);
+		myWindow.document.write(`<pre style="font-size : 14px">${JSON.parse(localStorage.getItem(`packet${clicked_id}`)).data}</pre>`);
 		
 	}
 	</script>
@@ -37,6 +49,7 @@
 	<h3>Packet Sniffer Data:</h3>
 	<table id='dataTable' class="table table-bordered" style="width:100%; text-align:center;">
 		<tr>
+			<th>Date and Time</th>
 			<th>Source IP</th>
 			<th>Source Port</th>
 			<th>Destination IP</th>

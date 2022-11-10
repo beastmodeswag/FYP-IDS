@@ -30,18 +30,17 @@ var id = 0;
 				
 				for(var j = 0; j < data_received[i].length-1; j++) //changed this, no more -1 at the end
 				{
-					console.log(data_received[i][6]);
-					if(String(data_received[i][5]) == "low")
+					if(String(data_received[i][6]) == "low")
 					{
 						cell = row.insertCell(j);
 						cell.innerHTML = String(data_received[i][j]).fontcolor("blue");
 					}
-					else if(String(data_received[i][5]) == "medium")
+					else if(String(data_received[i][6]) == "medium")
 					{
 						cell = row.insertCell(j);
 						cell.innerHTML = String(data_received[i][j]).fontcolor("orange");
 					}
-					else if(String(data_received[i][5]) == "high")
+					else if(String(data_received[i][6]) == "high")
 					{
 						cell = row.insertCell(j);
 						cell.innerHTML = String(data_received[i][j]).fontcolor("red");
@@ -52,14 +51,15 @@ var id = 0;
 						cell.innerHTML = String(data_received[i][j]);
 						
 						var Packet = {
-							source_ip : String(data_received[i][0]),
-							source_port : String(data_received[i][1]),
-							dest_ip : String(data_received[i][2]),
-							dest_port : String(data_received[i][3]),
-							prot : String(data_received[i][4]),
-							severity : String(data_received[i][5]),
-							msg : String(data_received[i][6]),
-							data : String(data_received[i][7])
+							date_time : String(data_received[i][0]),
+							source_ip : String(data_received[i][1]),
+							source_port : String(data_received[i][2]),
+							dest_ip : String(data_received[i][3]),
+							dest_port : String(data_received[i][4]),
+							proto : String(data_received[i][5]),
+							severity : String(data_received[i][6]),
+							msg : String(data_received[i][7]),
+							data : String(data_received[i][8])
 						};
 						
 						localStorage.setItem(`packet${id}`, JSON.stringify(Packet)); //storing the variables in localstorage
@@ -68,7 +68,7 @@ var id = 0;
 				}
 				
 				//new code for button
-				button = row.insertCell(7); //Last row after message
+				button = row.insertCell(8); //Last row after message
 
 				button.innerHTML = `<button onclick="myFunction(${id})" class="btn btn-info btn-lg" id="${id}">View</button>`;
 				
