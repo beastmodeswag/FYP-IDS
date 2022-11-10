@@ -177,7 +177,7 @@ def dos():
 def send_to_telegram(message):
 
     apiToken = '5623414566:AAGKkS-1jP2mWgCSYVkSkMDs9QmvLnmaegU'
-    chatID = '625857550' # change this
+    chatID = '' # change this
     apiURL = f'https://api.telegram.org/bot{apiToken}/sendMessage'
 
     try:
